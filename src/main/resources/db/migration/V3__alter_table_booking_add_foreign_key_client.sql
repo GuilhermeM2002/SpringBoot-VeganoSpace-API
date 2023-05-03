@@ -1,0 +1,1 @@
+alter table T_BOOKING add constraint t_booking_t_client_fk foreign key (client_id) references T_CLIENT (id);
