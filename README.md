@@ -1,6 +1,6 @@
 ## 💻 Sobre o projeto
 
-Apresentando o projeto da API Rest do Restaurante Vegano_Space - uma solução que visa facilitar a reserva de mesas e a consulta do menu de um restaurante vegano. O objetivo é fornecer uma experiência simples e eficiente para os clientes, permitindo que eles desfrutem da comida vegana de alta qualidade oferecida pelo estabelecimento.
+Apresentando o projeto desenvolvido inteiramente por mim da API Rest do Restaurante Vegano_Space - uma solução que visa facilitar a reserva de mesas e a consulta do menu de um restaurante vegano. O objetivo é fornecer uma experiência simples e eficiente para os clientes, permitindo que eles desfrutem da comida vegana de alta qualidade oferecida pelo estabelecimento.
 
 A API do Restaurante Vegano oferece duas funcionalidades principais: reserva de mesas e consulta do menu. Com a funcionalidade de reserva de mesas, os clientes podem facilmente agendar um horário para sua visita ao restaurante. Através de uma requisição, eles podem especificar a data, horário e o número de pessoas que desejam reservar. A API verifica a disponibilidade e confirma a reserva.
 
