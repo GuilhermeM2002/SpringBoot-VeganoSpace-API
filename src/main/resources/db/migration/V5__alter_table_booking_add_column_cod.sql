@@ -1,0 +1,1 @@
+alter table T_BOOKING add column cod varchar(100) not null unique;

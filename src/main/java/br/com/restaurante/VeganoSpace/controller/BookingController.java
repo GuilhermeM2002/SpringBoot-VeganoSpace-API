@@ -1,5 +1,6 @@
 package br.com.restaurante.VeganoSpace.controller;
 
+import br.com.restaurante.VeganoSpace.controller.services.BookingValidation;
 import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingData;
 import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingDataQuery;
 import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingDataOutput;
@@ -26,16 +27,19 @@ public class BookingController {
     private BookingRepository repository;
     @Autowired
     private BookingMapper bookingMapper;
+
+    @Autowired
+    private BookingValidation bookingValidation;
     @PostMapping
     @Transactional
     public ResponseEntity persist (@RequestBody @Valid BookingData data, UriComponentsBuilder uriBilder){
         var booking = new Booking(data);
 
-        repository.save(booking);
+        var bookingValid = bookingValidation.validation(booking);
 
-        var uri = uriBilder.path("booking/{id}").buildAndExpand(booking.getId()).toUri();
+        var uri = uriBilder.path("booking/{id}").buildAndExpand(bookingValid.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new BookingDataOutput(booking));
+        return ResponseEntity.created(uri).body(new BookingDataOutput(bookingValid));
     }
 
     @PutMapping("/{id}")

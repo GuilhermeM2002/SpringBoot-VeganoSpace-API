@@ -29,8 +29,7 @@ public class Client implements UserDetails {
     private User user;
     @Column(name = "dt_birth")
     private LocalDate dateBirth;
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
-    private Booking booking;
+
 
     public Client(ClientData data){
         this.cpf = data.cpf();

@@ -5,8 +5,8 @@ import br.com.restaurante.VeganoSpace.domain.Client;
 
 import java.time.OffsetDateTime;
 
-public record BookingDataOutput(String table, OffsetDateTime dateTimeBooking, String numberPerson, Client client) {
+public record BookingDataOutput(String table, OffsetDateTime dateTimeBooking, String numberPerson, String code) {
     public BookingDataOutput(Booking booking){
-        this(booking.getTable(), booking.getDateTimeBooking(), booking.getNumberPerson(), booking.getClient());
+        this(booking.getTable(), booking.getDateTimeBooking(), booking.getNumberPerson(), booking.getCode());
     }
 }
