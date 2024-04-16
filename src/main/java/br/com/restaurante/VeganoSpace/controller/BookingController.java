@@ -1,15 +1,17 @@
 package br.com.restaurante.VeganoSpace.controller;
 
-import br.com.restaurante.VeganoSpace.controller.services.BookingValidation;
-import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingData;
-import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingDataQuery;
-import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingDataOutput;
-import br.com.restaurante.VeganoSpace.domain.DTO.booking.BookingDataUpdate;
-import br.com.restaurante.VeganoSpace.domain.DTO.mapper.BookingMapper;
-import br.com.restaurante.VeganoSpace.domain.Booking;
-import br.com.restaurante.VeganoSpace.domain.repository.BookingRepository;
+import br.com.restaurante.VeganoSpace.services.BookingService;
+import br.com.restaurante.VeganoSpace.services.BookingValidation;
+import br.com.restaurante.VeganoSpace.application.dto.booking.BookingDto;
+import br.com.restaurante.VeganoSpace.application.dto.booking.BookingDtoQuery;
+import br.com.restaurante.VeganoSpace.application.dto.booking.BookingDtoOutput;
+import br.com.restaurante.VeganoSpace.application.dto.booking.BookingDtoUpdate;
+import br.com.restaurante.VeganoSpace.application.dto.mapper.BookingMapper;
+import br.com.restaurante.VeganoSpace.core.domain.Booking;
+import br.com.restaurante.VeganoSpace.adapters.repository.BookingRepository;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,39 +26,30 @@ import org.springframework.web.util.UriComponentsBuilder;
 @SecurityRequirement(name = "bearer-key")
 public class BookingController {
     @Autowired
-    private BookingRepository repository;
+    private ModelMapper mapper;
     @Autowired
-    private BookingMapper bookingMapper;
-
-    @Autowired
-    private BookingValidation bookingValidation;
+    private BookingService service;
     @PostMapping
     @Transactional
-    public ResponseEntity persist (@RequestBody @Valid BookingData data, UriComponentsBuilder uriBilder){
-        var booking = new Booking(data);
+    public ResponseEntity persist (@RequestBody @Valid BookingDto dto, UriComponentsBuilder uriBilder){
+        var booking = service.persistBooking(dto);
+        var uri = uriBilder.path("booking/{id}").buildAndExpand(booking.id()).toUri();
 
-        var bookingValid = bookingValidation.validation(booking);
-
-        var uri = uriBilder.path("booking/{id}").buildAndExpand(bookingValid.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new BookingDataOutput(bookingValid));
+        return ResponseEntity.created(uri).body(
+                new BookingDtoOutput(mapper.map(booking, Booking.class)));
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity update (@RequestBody @Valid BookingDataUpdate data, @PathVariable Long id){
-        var dataEntity = bookingMapper.toEntity(data);
+    public ResponseEntity update (@RequestBody @Valid BookingDtoUpdate dto, @PathVariable Long id){
+        var booking = service.updateBooking(dto, id);
 
-        var booking = repository.getReferenceById(id);
-        booking.BookingUpdate(dataEntity);
-
-        var bookingDto = bookingMapper.toModel(booking);
-        return ResponseEntity.ok(bookingDto);
+        return ResponseEntity.ok(booking);
     }
 
     @GetMapping
-    public ResponseEntity<Page<BookingDataQuery>> findAll (@PageableDefault(size = 10) Pageable page){
-        var bookingList = repository.findAll(page).map(BookingDataQuery::new);
+    public ResponseEntity<Page<BookingDtoQuery>> findAll (@PageableDefault(size = 10) Pageable page){
+        var bookingList = service.findALlBooking(page);
 
         return ResponseEntity.ok(bookingList);
     }
@@ -64,16 +57,16 @@ public class BookingController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity delete (@PathVariable Long id){
-        var bookingDelete = repository.getReferenceById(id);
-        repository.delete(bookingDelete);
+        service.deleteBooking(id);
 
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookingDataQuery> findOne (@PathVariable Long id){
-        var booking = repository.getReferenceById(id);
+    public ResponseEntity<BookingDtoQuery> findOne (@PathVariable Long id){
+        var booking = service.findOneBooking(id);
 
-        return ResponseEntity.ok(new BookingDataQuery(booking));
+        return ResponseEntity.ok(
+                new BookingDtoQuery(mapper.map(booking, Booking.class)));
     }
 }
