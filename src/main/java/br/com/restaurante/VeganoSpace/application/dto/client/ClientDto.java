@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 
 public record ClientDto(
+        Long id,
         @NotBlank
         String cpf,
         @NotBlank
