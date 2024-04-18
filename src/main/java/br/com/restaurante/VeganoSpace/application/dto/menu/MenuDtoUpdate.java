@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record MenuDtoUpdate(
         @NotBlank
+        Long id,
+        @NotBlank
         String dish,
         @NotNull
         double price,
