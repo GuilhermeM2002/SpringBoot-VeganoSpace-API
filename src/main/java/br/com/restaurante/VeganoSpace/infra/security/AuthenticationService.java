@@ -1,6 +1,6 @@
 package br.com.restaurante.VeganoSpace.infra.security;
 
-import br.com.restaurante.VeganoSpace.domain.repository.ClientRepository;
+import br.com.restaurante.VeganoSpace.adapters.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

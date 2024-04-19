@@ -1,6 +1,6 @@
 package br.com.restaurante.VeganoSpace.infra.security;
 
-import br.com.restaurante.VeganoSpace.domain.repository.ClientRepository;
+import br.com.restaurante.VeganoSpace.adapters.repository.ClientRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
